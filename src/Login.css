@@ -1,0 +1,113 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font: 400 15px/1.8 "Lato", sans-serif;
+    color: #ffffff;
+}
+.bg-image{
+    padding:4px;
+    height: 100%;
+    position: relative;
+    background-image: url("login-bg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+form {
+ 	border:1px solid gray;
+	border-radius: 8px;
+	padding:9px;
+	display:flex;
+	max-width:400px;
+    -webkit-backdrop-filter: blur(20px);
+    -moz-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    background-color: rgba(255,255,255,0.1);
+    margin-left:auto;
+	margin-right:auto;
+	margin-top: 10%;
+}.logo {
+	width: 60%;
+	margin-left:auto;
+	margin-right:auto;
+}
+h2 {
+	display:flex;
+	flex-flow:wrap;
+}
+h2 > span {
+	width:100%;
+	text-align: center;
+	vertical-align: top;
+	font-size: 38px
+}
+.field span {
+    visibility: hidden;
+}
+.username input, .password input {
+	color:white;
+	width: calc(100% - 8px);
+	background-color:transparent;
+	border:1px solid;
+	border-color: rgba(255, 255, 255, 0.38);
+	height:24px;
+	font-size:18px;
+	text-align: center;
+	border-radius: 14px
+}
+input[id="UsernameTextBox"]:hover, input[id="PasswordTextBox"]:hover {
+	border-color: rgba(208, 234, 255, 0.65)
+}
+.button {
+    height:34px;
+    font-size:20px;
+    border:1px solid transparent;
+	width:100%;
+    transition: background-color .3s ease-in-out;
+	background-color: rgb(73, 183, 236);
+	color:white;
+	margin-top:34px;
+	border-radius: 8px;
+	cursor: pointer;
+}
+form:has(input:placeholder-shown) .button{
+	pointer-events: none!important;
+	background-color: rgba(73, 183, 236, 0.26);
+	border-color: rgb(73, 183, 236);
+}
+.error {
+    color: rgb(255, 78, 78);
+    font-weight: bold;
+}
+
+footer.fixed-bottom {
+	background-color: var(--global-footer-bg-color);
+	font-size:.75rem
+}
+
+footer.fixed-bottom .container {
+	color: var(--global-footer-text-color);
+	padding-top: 9px;
+	padding-bottom: 8px;
+	text-align:center
+}
+
+footer.fixed-bottom a {
+	color:var(--global-footer-link-color)
+}
+
+footer.fixed-bottom a:hover {
+	color: var(--global-theme-color);
+	text-decoration:none
+}
+
+footer.sticky-bottom {
+	border-top: 1px solid var(--global-divider-color);
+	padding-top: 40px;
+	padding-bottom: 40px;
+	font-size:.9rem
+}
+
+footer.sticky-bottom .container {
+	text-align:center
+}
