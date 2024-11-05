@@ -4,9 +4,9 @@ Inherits="Login" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head runat="server">
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Login</title>
-    <link href="~/favicon.ico" rel="icon" type="image/x-icon"/>
+    <link href="~/Content/Images/favicon.ico" rel="icon" type="image/x-icon" />
     <link href="~/Login.css" rel="stylesheet" />
     <style></style>
     <script>
@@ -31,7 +31,7 @@ Inherits="Login" %>
       <form id="form1" runat="server">
         <div style="width: 100%">
           <h2>
-            <img class="logo" src="Content/Images/grooper_logo.png" /><span
+            <img class="logo" src="Content/Images/grooper_logo.svg" /><span
               >Enterprise</span
             >
           </h2>
@@ -83,8 +83,9 @@ Inherits="Login" %>
         </div>
       </form>
       <footer class="fixed-bottom" role="contentinfo">
-        <div class="container mt-0">&copy Copyright 2024 Grooper. Powered by
-         <a
+        <div class="container mt-0">
+          &copy Copyright 2024 Grooper. Powered by
+          <a
             href="https://www.bisok.com"
             target="_blank"
             rel="external nofollow noopener"

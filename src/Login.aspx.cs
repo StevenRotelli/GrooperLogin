@@ -98,7 +98,7 @@ public partial class Login : System.Web.UI.Page
             {
                 HttpCookie lastUserCookie = new HttpCookie("lastUser", username);
                 lastUserCookie.Expires = DateTime.Now.AddDays(30);
-                Response.Cookies.Add(lastUserCookie)
+                Response.Cookies.Add(lastUserCookie);
                 FormsAuthentication.SetAuthCookie(username, false);
 
                 HandleAuthenticatedUser();

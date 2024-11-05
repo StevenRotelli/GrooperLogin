@@ -10,7 +10,7 @@
   let buttonExist = false;
   const checkExistInterval = setInterval(() => {
     const userMenu = document.querySelector(
-      "body div.top-nav > div > div.navgroup > div.navgroup > .DropButton",
+      "body div.top-nav > div > div.navgroup > div.navgroup > .DropButton"
     );
     if (userMenu && !buttonExist) {
       const userHeading = userMenu.querySelector(".user-info > .header");
@@ -22,7 +22,7 @@
         button.title = "Sign out of Grooper";
         label.setAttribute(
           "style",
-          "float: right; margin-top: 8px; margin-right: 8px;",
+          "float: right; margin-top: 8px; margin-right: 8px;"
         );
         button.setAttribute("style", "float: right; margin-top: 8px;");
         button.classList.add("text-button");

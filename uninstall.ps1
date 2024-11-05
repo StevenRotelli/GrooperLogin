@@ -6,11 +6,11 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 $grooperRoot = "$env:SYSTEMDRIVE\inetpub\wwwroot\Grooper"
 
 $customFiles = @(
-    "$grooperRoot\apple-touch-icon.png",
-    "$grooperRoot\favicon.svg",
-    "$grooperRoot\favicon-48x48.png",
-    "$grooperRoot\web-app-manifest-192x192.png",
-    "$grooperRoot\web-app-manifest-512x512.png",
+    "$grooperRoot\Content\Images\apple-touch-icon.png",
+    "$grooperRoot\Content\Images\favicon.svg",
+    "$grooperRoot\Content\Images\favicon-48x48.png",
+    "$grooperRoot\Content\Images\web-app-manifest-192x192.png",
+    "$grooperRoot\Content\Images\web-app-manifest-512x512.png",
     "$grooperRoot\Login.aspx",
     "$grooperRoot\Login.aspx.cs",
     "$grooperRoot\Login.css",
@@ -26,18 +26,15 @@ $customFiles = @(
     "$grooperRoot\Views\Shared\Layout.cshtml"
 )
 
-
 foreach($file in $customFiles) {
     Remove-Item $file
 }
-
 
 $webConfigPath = "$grooperRoot\Web.config"
 $layoutCshtmlPath = "$grooperRoot\Views\Shared\Layout.cshtml"
 
 $webConfigBackupPath = "$grooperRoot\Web.config.bak"
 $layoutCshtmlBackupPath = "$grooperRoot\Views\Shared\Layout.cshtml.bak"
-
 
 if (Test-Path $webConfigBackupPath) {
     Rename-Item -Path $webConfigBackupPath -NewName $webConfigPath -Force

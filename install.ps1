@@ -4,43 +4,74 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
     #Start-Process powershell "-ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
     exit
 }
+
+Import-Module WebAdministration
+$siteName = "Grooper"
+$sitePath = "IIS:\Sites\Default Web Site\$siteName"
+
+if (-not (Test-Path $sitePath)) {
+    Write-Host "Site '$siteName' not found in IIS."
+    exit
+}
+
 $grooperRoot = "$env:SYSTEMDRIVE\inetpub\wwwroot\Grooper"
 $webConfigPath = "$grooperRoot\Web.config"
 $layoutCshtmlPath = "$grooperRoot\Views\Shared\Layout.cshtml"
 $webConfigBackupPath = "$grooperRoot\Web.config.bak"
 $layoutCshtmlBackupPath = "$grooperRoot\Views\Shared\Layout.cshtml.bak"
+
 if (-not(Test-Path $webConfigBackupPath)) {
-if (Test-Path $webConfigPath) {
-    Copy-Item -Path $webConfigPath -Destination $webConfigBackupPath -Force
-    Write-Host "Backup of Web.config created at $webConfigBackupPath"
-} else {
-    Write-Host "Web.config file not found at $webConfigPath"
+    if (Test-Path $webConfigPath) {
+        Copy-Item -Path $webConfigPath -Destination $webConfigBackupPath -Force
+        Write-Host "Backup of Web.config created at $webConfigBackupPath"
+    } else {
+        Write-Host "Web.config file not found at $webConfigPath"
+    }
 }
-}
+
 if (-not(Test-Path $layoutCshtmlBackupPath)) {
-if (Test-Path $layoutCshtmlPath) {
-    Copy-Item -Path $layoutCshtmlPath -Destination $layoutCshtmlBackupPath -Force
-    Write-Host "Backup of _Layout.cshtml created at $layoutCshtmlBackupPath"
+    if (Test-Path $layoutCshtmlPath) {
+        Copy-Item -Path $layoutCshtmlPath -Destination $layoutCshtmlBackupPath -Force
+        Write-Host "Backup of Layout.cshtml created at $layoutCshtmlBackupPath"
+    } else {
+        Write-Host "Layout.cshtml file not found at $layoutCshtmlPath"
+    }
+}
+
+$mimeExtension = ".webmanifest"
+$mimeType = "application/manifest+json"
+$existingMime = Get-WebConfigurationProperty -PSPath $sitePath `
+    -Filter "system.webServer/staticContent/mimeMap" `
+    -Name "." | Where-Object { $_.fileExtension -eq $mimeExtension }
+
+if ($existingMime) {
+    Write-Host "MIME type for '$mimeExtension' already exists. No changes made."
 } else {
-    Write-Host "Layout.cshtml file not found at $layoutCshtmlPath"
-}
+    Add-WebConfigurationProperty -PSPath $sitePath `
+        -Filter "system.webServer/staticContent" `
+        -Name "." -Value @{
+            fileExtension = $mimeExtension
+            mimeType = $mimeType
+        }
+    Write-Host "Added MIME type for '$mimeExtension' with type '$mimeType' to site '$siteName'."
 }
 
-$webConfigContent = Get-Content -Path $webConfigPath -Raw
 
-$webConfigInsertLine = @"
-    <authentication mode="Forms">
-        <forms cookieless="UseCookies" name=".ASPXAUTH" timeout="14440" />
-    </authentication>
-"@
+Set-WebConfigurationProperty -PSPath $sitePath `
+    -Filter "system.web/authentication" `
+    -Name "mode" -Value "Forms"
 
-if ($webConfigContent -match '<authentication mode="Windows" />') {
-    $webConfigContent = $webConfigContent -replace '<authentication mode="Windows" />', $webConfigInsertLine
-    Set-Content -Path $webConfigPath -Value $webConfigContent
-    Write-Host "Replaced Windows authentication with Forms authentication in web.config"
-} else {
-    Write-Host "Windows authentication block not found. No changes made to web.config."
-}
+Set-WebConfigurationProperty -PSPath $sitePath `
+    -Filter "system.web/authentication/forms" `
+    -Name "cookieless" -Value "UseCookies"
+
+Set-WebConfigurationProperty -PSPath $sitePath `
+    -Filter "system.web/authentication/forms" `
+    -Name "name" -Value ".ASPXAUTH"
+
+Set-WebConfigurationProperty -PSPath $sitePath `
+    -Filter "system.web/authentication/forms" `
+    -Name "timeout" -Value "14440"
 
 $libSourcePaths = @(
     "$PSScriptRoot\src\libs\System.DirectoryServices.AccountManagement.dll",
@@ -48,6 +79,7 @@ $libSourcePaths = @(
     "$PSScriptRoot\src\libs\Newtonsoft.Json.dll",
     "$PSScriptRoot\src\libs\Newtonsoft.Json.xml"
 )
+
 foreach ($libPath in $libSourcePaths) {
     if (Test-Path $libPath) {
         Copy-Item -Path $libPath -Destination "$grooperRoot\bin\" -Force
@@ -57,7 +89,7 @@ foreach ($libPath in $libSourcePaths) {
     }
 }
 
-$rootFiles = @(
+$imageFiles = @(
     "$PSScriptRoot\src\images\apple-touch-icon.png",
     "$PSScriptRoot\src\images\favicon.svg",
     "$PSScriptRoot\src\images\favicon.ico",
@@ -65,6 +97,20 @@ $rootFiles = @(
     "$PSScriptRoot\src\images\web-app-manifest-192x192.png",
     "$PSScriptRoot\src\images\web-app-manifest-512x512.png",
     "$PSScriptRoot\src\images\login-bg.jpg",
+    "$PSScriptRoot\src\images\grooper_logo.svg"
+)
+
+foreach ($filePath in $imageFiles) {
+    if (Test-Path $filePath) {
+        Copy-Item -Path $filePath -Destination "$grooperRoot\Content\Images\" -Force
+        Write-Host "Copied $filePath to $grooperRoot\Content\Images\"
+    } else {
+        Write-Host "File not found: $pwd $filePath"
+
+    }
+}
+
+$rootFiles = @(
     "$PSScriptRoot\src\Login.aspx",
     "$PSScriptRoot\src\Login.aspx.cs",
     "$PSScriptRoot\src\Login.css",
@@ -78,7 +124,7 @@ foreach ($filePath in $rootFiles) {
         Copy-Item -Path $filePath -Destination "$grooperRoot\" -Force
         Write-Host "Copied $filePath to $grooperRoot\"
     } else {
-        Write-Host "File not found: $pdw $filePath"
+        Write-Host "File not found: $pwd $filePath"
 
     }
 }
