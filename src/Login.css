@@ -9,8 +9,13 @@ html {
 }
 
 .bg-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
   padding: 4px;
-  height: 100%;
   position: relative;
   background-image: url("Content/Images/login-bg.jpg");
   background-size: cover;
@@ -46,7 +51,7 @@ h2 {
   flex-flow: wrap;
 }
 
-h2>span {
+h2 > span {
   width: 100%;
   text-align: center;
   vertical-align: top;

@@ -110,11 +110,13 @@ foreach ($filePath in $imageFiles) {
     }
 }
 
+Copy-Item -Path "$PSScriptRoot\src\Login.cshtml" -Destination "$grooperRoot\Views\Shared\" -Force
+Write-Host "Copied $filePath to $grooperRoot\"
+
 $rootFiles = @(
     "$PSScriptRoot\src\Login.aspx",
     "$PSScriptRoot\src\Login.aspx.cs",
     "$PSScriptRoot\src\Login.css",
-    "$PSScriptRoot\src\Login.cshtml",
     "$PSScriptRoot\src\Logout.js",
     "$PSScriptRoot\src\site.webmanifest"
 )

@@ -14,7 +14,7 @@ $customFiles = @(
     "$grooperRoot\Login.aspx",
     "$grooperRoot\Login.aspx.cs",
     "$grooperRoot\Login.css",
-    "$grooperRoot\Login.cshtml",
+    "$grooperRoot\Views\Shared\Login.cshtml",
     "$grooperRoot\login-bg.jpg",
     "$grooperRoot\Logout.js",
     "$grooperRoot\site.webmanifest",
